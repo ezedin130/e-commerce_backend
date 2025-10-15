@@ -22,9 +22,9 @@ public class ProductVariant {
     @Transient
     private String color;
     @Transient
-    private BigDecimal additionalPrice;
+    private double additionalPrice;
     @Transient
-    private BigDecimal discount;
+    private double discount;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;

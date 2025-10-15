@@ -20,7 +20,7 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull(message = "amount is required")
-    private BigDecimal amount;
+    private double amount;
     @NotNull(message = "payment date is required")
     private LocalDateTime paymentDate;
     @NotNull(message = "order id is required")

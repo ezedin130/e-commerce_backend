@@ -24,7 +24,7 @@ public class Product {
     @NotBlank(message = "description is required")
     private String description;
     @NotNull(message = "price is required")
-    private BigDecimal price;
+    private double price;
     @NotNull(message = "store id is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
