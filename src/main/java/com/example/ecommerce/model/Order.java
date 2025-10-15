@@ -30,7 +30,7 @@ public class Order {
     @NotNull(message = "Order date is required")
     private LocalDate orderDate;
     @NotNull(message = "total Price is required")
-    private BigDecimal totalPrice;
+    private double totalPrice;
     //ToDo:add relationship with the user after user is created
 
 }

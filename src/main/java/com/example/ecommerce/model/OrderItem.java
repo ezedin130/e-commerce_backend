@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @Builder
@@ -19,9 +21,9 @@ public class OrderItem {
     @NotNull(message = "quantity is required")
     private Integer quantity;
     @NotNull(message = "unit price is required")
-    private Integer unitPrice;
+    private double unitPrice;
     @NotNull(message = "sub total price is required")
-    private Integer subTotalPrice;
+    private double subTotalPrice;
     @NotNull(message = "order id is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
