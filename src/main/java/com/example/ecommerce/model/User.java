@@ -25,6 +25,7 @@ public class User {
     private String lastName;
     @NotBlank(message = "username is required")
     private String username;
+    //TODO: username is supposed to be generated automatically when user registers
     @NotBlank(message = "password is required")
     private String password;
     //Todo: figure out relationship between user and role possibly many to many
