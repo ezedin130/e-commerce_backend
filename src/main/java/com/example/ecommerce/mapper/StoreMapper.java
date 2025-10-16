@@ -17,6 +17,7 @@ public class StoreMapper {
         StoreOutDto dto = new StoreOutDto();
         dto.setId(store.getId());
         dto.setName(store.getName());
+        dto.setAddress(store.getAddress());
         return dto;
     }
 }
