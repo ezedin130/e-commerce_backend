@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public class OrderOutDto {
     private Long id;
     private String orderStatus;
+    private String paymentStatus;
     private LocalDate orderDate;
     private double totalPrice;
 }
