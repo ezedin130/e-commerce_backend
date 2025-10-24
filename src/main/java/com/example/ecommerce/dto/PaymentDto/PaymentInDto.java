@@ -7,6 +7,5 @@ import java.time.LocalDateTime;
 @Data
 public class PaymentInDto {
     private double amount;
-    private LocalDateTime paymentDate;
     private Long orderId;
 }
