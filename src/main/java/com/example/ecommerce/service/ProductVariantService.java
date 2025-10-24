@@ -9,6 +9,7 @@ import com.example.ecommerce.model.ProductVariant;
 import com.example.ecommerce.repository.ProductRepository;
 import com.example.ecommerce.repository.ProductVariantRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -18,8 +19,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ProductVariantService {
+    @Autowired
     private final ProductVariantRepository variantRepo;
+    @Autowired
     private final ProductVariantMapper variantMapper;
+    @Autowired
     private final ProductRepository productRepo;
 
     public ProductVariantOutDto createVariant(ProductVariantInDto dto){

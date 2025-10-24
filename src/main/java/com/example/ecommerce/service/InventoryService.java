@@ -10,6 +10,7 @@ import com.example.ecommerce.repository.InventoryRepository;
 import com.example.ecommerce.repository.ProductVariantRepository;
 import com.example.ecommerce.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +19,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class InventoryService {
+    @Autowired
     private final InventoryRepository inventoryRepo;
+    @Autowired
     private final ProductVariantRepository variantRepo;
+    @Autowired
     private final StoreRepository storeRepo;
+    @Autowired
     private final InventoryMapper mapper;
     public InventoryOutDto createInventory(InventoryInDto dto){
         ProductVariant variant = variantRepo.findById(dto.getProductVariantId())
