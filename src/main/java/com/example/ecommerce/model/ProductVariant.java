@@ -1,6 +1,7 @@
 package com.example.ecommerce.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,9 +18,9 @@ public class ProductVariant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Transient
+    @NotBlank(message = "size of product is required")
     private String size;
-    @Transient
+    @NotBlank(message = "color of product is required")
     private String color;
     @Transient
     private double additionalPrice;
