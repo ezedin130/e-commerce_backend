@@ -22,6 +22,8 @@ public class ProductVariantMapper {
         dto.setId(productVariant.getId());
         dto.setSize(productVariant.getSize());
         dto.setColor(productVariant.getColor());
+        dto.setAdditionalPrice(productVariant.getAdditionalPrice());
+        dto.setDiscount(productVariant.getDiscount());
         dto.setProductId(productVariant.getProduct().getId());
         return dto;
     }
