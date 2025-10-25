@@ -27,6 +27,10 @@ public class PaymentService {
         Payment savedPayment = paymentRepo.save(payment);
         return mapper.toDto(savedPayment);
     }
+    public Payment getPaymentById(Long id){
+        return paymentRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("payment not found"));
+    }
     public List<PaymentOutDto> getAllPayments(){
         return paymentRepo.findAll().stream()
                 .map(mapper::toDto)
