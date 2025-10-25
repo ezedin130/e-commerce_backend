@@ -22,9 +22,15 @@ public class StoreService {
         Store savedStore = storeRepo.save(store);
         return storeMapper.toDto(savedStore);
     }
+    public Store findStoreById(Long id){
+        return storeRepo.findById(id)
+                .orElseThrow(()-> new RuntimeException("Store with" +id+ "id is not found"));
+    }
     public List<StoreOutDto> getAllStores(){
         return storeRepo.findAll().stream()
                 .map(storeMapper::toDto)
                 .collect(Collectors.toList());
     }
+    //ToDo : there should be some way to find store by owner
+    //ToDo :  make sure there is way to change store fields using put or patch operation specifically after authentication and authorization are enabled
 }
