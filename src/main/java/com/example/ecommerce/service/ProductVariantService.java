@@ -33,6 +33,10 @@ public class ProductVariantService {
         ProductVariant savedVariant = variantRepo.save(variant);
         return variantMapper.toDto(savedVariant);
     }
+    public ProductVariant getVariantById(Long id){
+        return variantRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("variant not found"));
+    }
     public List<ProductVariantOutDto> getAllVariants(){
         return variantRepo.findAll().stream()
                 .map(variantMapper::toDto)
