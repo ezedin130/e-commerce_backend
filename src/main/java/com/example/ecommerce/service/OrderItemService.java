@@ -32,6 +32,10 @@ public class OrderItemService {
         OrderItem savedItem = itemRepo.save(orderItem);
         return mapper.toDto(savedItem);
     }
+    public OrderItem getOrderItemById(Long id){
+        return itemRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order Not Found"));
+    }
     public List<OrderItemOutDto> getAllItems(){
         return itemRepo.findAll().stream()
                 .map(mapper::toDto)
