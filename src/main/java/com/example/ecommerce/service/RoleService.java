@@ -23,6 +23,10 @@ public class RoleService {
         Role savedRole = roleRepo.save(role);
         return roleMapper.toDto(savedRole);
     }
+    public Role findRoleById(Long id){
+        return roleRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Role with " +id+ " id is not found"));
+    }
     public List<RoleOutDto> getAllRoles(){
         return roleRepo.findAll().stream()
                 .map(roleMapper::toDto)
