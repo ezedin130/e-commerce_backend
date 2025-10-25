@@ -36,6 +36,10 @@ public class InventoryService {
         Inventory savedInventory = inventoryRepo.save(inventory);
         return mapper.toDto(savedInventory);
     }
+    public Inventory getInventoryById(Long id){
+        return inventoryRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("inventory not found"));
+    }
     public List<InventoryOutDto> getAllInventories(){
         return inventoryRepo.findAll().stream()
                 .map(mapper::toDto)
