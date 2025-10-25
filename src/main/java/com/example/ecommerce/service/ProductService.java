@@ -31,6 +31,10 @@ public class ProductService {
         Product savedProduct = prodRepo.save(product);
         return mapper.toDto(savedProduct);
     }
+    public Product getProductById(Long id){
+        return prodRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product with " +id+ " id is not found"));
+    }
     public List<ProductOutDto> findAllProducts(){
         return prodRepo.findAll().stream()
                 .map(mapper :: toDto)
