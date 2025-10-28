@@ -24,7 +24,11 @@ public class InventoryController {
 
     @PostMapping("/inventory")
     public ResponseEntity<InventoryOutDto> createInventory(@RequestBody InventoryInDto dto){
-        InventoryOutDto result = service.createInventory(dto);
+        InventoryOutDto result = service.createInventoryForStore(
+                dto.getStoreId(),
+                dto.getProductVariantId(),
+                dto.getQuantity()
+        );
         return ResponseEntity.ok(result);
     }
     @GetMapping("/get-inventory-by-id/{id}")
