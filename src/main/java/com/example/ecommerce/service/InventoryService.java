@@ -9,6 +9,7 @@ import com.example.ecommerce.model.Store;
 import com.example.ecommerce.repository.InventoryRepository;
 import com.example.ecommerce.repository.ProductVariantRepository;
 import com.example.ecommerce.repository.StoreRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,21 @@ public class InventoryService {
         Store store = storeRepo.findById(dto.getStoreId())
                 .orElseThrow(() -> new RuntimeException("store not found"));
         Inventory inventory = mapper.toEntity(dto,store,variant);
+        Inventory savedInventory = inventoryRepo.save(inventory);
+        return mapper.toDto(savedInventory);
+    }
+    @Transactional
+    public InventoryOutDto createInventoryForStore(Long storeId, Long variantId, int quantity){
+        Store store = storeRepo.findById(storeId)
+                .orElseThrow(() -> new RuntimeException("Store not found"));
+        ProductVariant variant = variantRepo.findById(variantId)
+                .orElseThrow(() -> new RuntimeException("Variant not found"));
+
+        Inventory inventory = Inventory.builder()
+                .store(store)
+                .productVariant(variant)
+                .quantity(quantity)
+                .build();
         Inventory savedInventory = inventoryRepo.save(inventory);
         return mapper.toDto(savedInventory);
     }
