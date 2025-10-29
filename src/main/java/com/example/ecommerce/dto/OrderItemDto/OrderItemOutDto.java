@@ -9,5 +9,4 @@ public class OrderItemOutDto {
     private double unitPrice;
     private double subTotalPrice;
     private Long orderId;
-    private Long productVariantId;
 }

@@ -28,9 +28,6 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
-    @NotNull(message = "product variant id is required")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_variant_id")
-    private ProductVariant productVariant;
+
 
 }

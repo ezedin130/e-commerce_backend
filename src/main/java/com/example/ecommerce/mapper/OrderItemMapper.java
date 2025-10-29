@@ -9,13 +9,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OrderItemMapper {
-    public OrderItem toEntity(OrderItemInDto dto, Order order, ProductVariant productVariant){
+    public OrderItem toEntity(OrderItemInDto dto, Order order){
         return OrderItem.builder()
                 .quantity(dto.getQuantity())
                 .unitPrice(dto.getUnitPrice())
                 .subTotalPrice(dto.getSubTotalPrice())
                 .order(order)
-                .productVariant(productVariant)
                 .build();
     }
     public OrderItemOutDto toDto(OrderItem  orderItem){
@@ -25,7 +24,6 @@ public class OrderItemMapper {
         dto.setUnitPrice(orderItem.getUnitPrice());
         dto.setSubTotalPrice(orderItem.getSubTotalPrice());
         dto.setOrderId(orderItem.getOrder().getId());
-        dto.setProductVariantId(orderItem.getProductVariant().getId());
         return dto;
     }
 }

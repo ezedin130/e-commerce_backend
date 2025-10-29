@@ -8,5 +8,4 @@ public class OrderItemInDto {
     private double unitPrice;
     private double subTotalPrice;
     private Long orderId;
-    private Long productVariantId;
 }
