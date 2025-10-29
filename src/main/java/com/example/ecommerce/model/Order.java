@@ -32,6 +32,10 @@ public class Order {
     private LocalDate orderDate;
     @NotNull(message = "total Price is required")
     private double totalPrice;
+    @NotNull(message = "product variant id is required")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_variant_id")
+    private ProductVariant productVariant;
     //ToDo:add relationship with the user after user is created
 
 }
