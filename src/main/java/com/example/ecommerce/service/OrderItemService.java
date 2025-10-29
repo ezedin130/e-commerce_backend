@@ -1,12 +1,9 @@
 package com.example.ecommerce.service;
 
-import com.example.ecommerce.dto.OrderDto.OrderOutDto;
 import com.example.ecommerce.dto.OrderItemDto.OrderItemInDto;
 import com.example.ecommerce.dto.OrderItemDto.OrderItemOutDto;
 import com.example.ecommerce.mapper.OrderItemMapper;
-import com.example.ecommerce.model.Order;
-import com.example.ecommerce.model.OrderItem;
-import com.example.ecommerce.model.ProductVariant;
+import com.example.ecommerce.model.*;
 import com.example.ecommerce.repository.OrderItemRepository;
 import com.example.ecommerce.repository.OrderRepository;
 import com.example.ecommerce.repository.ProductVariantRepository;
@@ -26,10 +23,23 @@ public class OrderItemService {
     public OrderItemOutDto createOrderItem(OrderItemInDto dto){
         Order order = orderRepo.findById(dto.getOrderId())
                 .orElseThrow(()-> new RuntimeException("Order Not Found"));
-        ProductVariant variant = variantRepository.findById(dto.getProductVariantId())
-                .orElseThrow(()-> new RuntimeException("Product Variant Not Found"));
-        OrderItem orderItem = mapper.toEntity(dto,order,variant);
+        OrderItem orderItem = mapper.toEntity(dto,order);
         OrderItem savedItem = itemRepo.save(orderItem);
+        return mapper.toDto(savedItem);
+    }
+    public OrderItemOutDto createOrderItemForOrder(Long variantId,Order order){
+        int quantity = 1;
+        ProductVariant variant = variantRepository.getReferenceById(variantId);
+        Product product = variant.getProduct();
+        double unitPrice = product.getPrice();
+        double subTotalPrice = quantity * unitPrice;
+        OrderItem item = OrderItem.builder()
+                .quantity(quantity)
+                .unitPrice(unitPrice)
+                .subTotalPrice(subTotalPrice)
+                .order(order)
+                .build();
+        OrderItem savedItem = itemRepo.save(item);
         return mapper.toDto(savedItem);
     }
     public OrderItem getOrderItemById(Long id){
