@@ -6,4 +6,5 @@ import lombok.Data;
 public class StoreInDto {
     private String name;
     private String address;
+    private Long userId;
 }

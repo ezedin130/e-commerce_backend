@@ -7,4 +7,5 @@ public class StoreOutDto {
     private Long id;
     private String name;
     private String address;
+    private Long userId;
 }
