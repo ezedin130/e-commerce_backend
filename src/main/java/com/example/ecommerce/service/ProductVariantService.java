@@ -8,6 +8,7 @@ import com.example.ecommerce.model.ProductVariant;
 import com.example.ecommerce.model.Store;
 import com.example.ecommerce.repository.ProductRepository;
 import com.example.ecommerce.repository.ProductVariantRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,7 @@ public class ProductVariantService {
         inventoryService.createInventoryForStore(store.getId(), savedVariant.getId(), 0);
         return variantMapper.toDto(savedVariant);
     }
+    @Transactional
     public ProductVariantOutDto createVariantForProduct(Product product){
          String defaultSize = "Standard";
         String defaultColor = "Default";

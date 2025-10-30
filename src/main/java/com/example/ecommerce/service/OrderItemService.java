@@ -7,6 +7,7 @@ import com.example.ecommerce.model.*;
 import com.example.ecommerce.repository.OrderItemRepository;
 import com.example.ecommerce.repository.OrderRepository;
 import com.example.ecommerce.repository.ProductVariantRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class OrderItemService {
         OrderItem savedItem = itemRepo.save(orderItem);
         return mapper.toDto(savedItem);
     }
+    @Transactional
     public OrderItemOutDto createOrderItemForOrder(Long variantId,Order order){
         int quantity = 1;
         ProductVariant variant = variantRepository.getReferenceById(variantId);
