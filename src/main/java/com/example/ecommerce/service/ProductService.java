@@ -23,12 +23,15 @@ public class ProductService {
     private StoreRepository storeRepo;
     @Autowired
     private final ProductMapper mapper;
+    @Autowired
+    private final ProductVariantService variantService;
 
     public ProductOutDto createProduct(ProductInDto dto){
         Store store = storeRepo.findById(dto.getStoreId())
                 .orElseThrow(()-> new RuntimeException("Store not found"));
         Product product = mapper.toEntity(dto,store);
         Product savedProduct = prodRepo.save(product);
+        variantService.createVariantForProduct(savedProduct);
         return mapper.toDto(savedProduct);
     }
     public Product getProductById(Long id){
