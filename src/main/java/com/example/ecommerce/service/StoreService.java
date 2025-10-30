@@ -3,10 +3,10 @@ package com.example.ecommerce.service;
 import com.example.ecommerce.dto.StoreDto.StoreInDto;
 import com.example.ecommerce.dto.StoreDto.StoreOutDto;
 import com.example.ecommerce.mapper.StoreMapper;
-import com.example.ecommerce.model.ProductVariant;
 import com.example.ecommerce.model.Store;
-import com.example.ecommerce.repository.ProductVariantRepository;
+import com.example.ecommerce.model.User;
 import com.example.ecommerce.repository.StoreRepository;
+import com.example.ecommerce.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,9 +21,13 @@ public class StoreService {
     private final StoreRepository storeRepo;
     @Autowired
     private final StoreMapper storeMapper;
+    @Autowired
+    private final UserRepository userRepo;
 
     public StoreOutDto createStore(StoreInDto dto){
-        Store store = storeMapper.toEntity(dto);
+        User user = userRepo.findById(dto.getUserId())
+                .orElseThrow(()-> new RuntimeException("user not found"));
+        Store store = storeMapper.toEntity(dto,user);
         Store savedStore = storeRepo.save(store);
         return storeMapper.toDto(savedStore);
     }
