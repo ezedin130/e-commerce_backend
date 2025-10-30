@@ -1,6 +1,5 @@
 package com.example.ecommerce.service;
 
-import com.example.ecommerce.dto.ProductDto.ProductOutDto;
 import com.example.ecommerce.dto.ProductVariantDto.ProductVariantInDto;
 import com.example.ecommerce.dto.ProductVariantDto.ProductVariantOutDto;
 import com.example.ecommerce.mapper.ProductVariantMapper;
@@ -9,11 +8,9 @@ import com.example.ecommerce.model.ProductVariant;
 import com.example.ecommerce.model.Store;
 import com.example.ecommerce.repository.ProductRepository;
 import com.example.ecommerce.repository.ProductVariantRepository;
-import com.example.ecommerce.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +34,24 @@ public class ProductVariantService {
         ProductVariant savedVariant = variantRepo.save(variant);
         Store store = product.getStore();
         inventoryService.createInventoryForStore(store.getId(), savedVariant.getId(), 0);
+        return variantMapper.toDto(savedVariant);
+    }
+    public ProductVariantOutDto createVariantForProduct(Product product){
+         String defaultSize = "Standard";
+        String defaultColor = "Default";
+        ProductVariant variant = ProductVariant.builder()
+                .size(defaultSize)
+                .color(defaultColor)
+                .product(product)
+                .build();
+        ProductVariant savedVariant = variantRepo.save(variant);
+        Store store = product.getStore();
+        if (store != null) {
+            inventoryService.createInventoryForStore(store.getId(), savedVariant.getId(), 0);
+        } else {
+            throw new RuntimeException("Cannot create inventory — product has no store assigned");
+        }
+
         return variantMapper.toDto(savedVariant);
     }
     public ProductVariant getVariantById(Long id){
