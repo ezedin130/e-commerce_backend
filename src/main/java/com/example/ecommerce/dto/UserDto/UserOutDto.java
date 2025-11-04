@@ -2,6 +2,8 @@ package com.example.ecommerce.dto.UserDto;
 
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
 public class UserOutDto {
     private Long id;
@@ -9,4 +11,5 @@ public class UserOutDto {
     private String lastName;
     private String userName;
     private String password;
+    private Set<Long> roleIds;
 }
