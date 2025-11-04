@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Entity
 @Data
 @Builder
@@ -20,4 +22,6 @@ public class Role {
     @Column(unique = true)
     private String name;
     //Todo: figure out relationship between user and role possibly many to many
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
 }
