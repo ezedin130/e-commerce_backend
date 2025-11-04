@@ -21,8 +21,8 @@ public class Store {
     private String name;
     @NotBlank(message = "address for the store is required")
     private String address;
-    @NotNull(message = "address for the store is required")
-    @OneToOne(fetch = FetchType.LAZY)
+    @NotNull(message = "user for the store is required")
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 }
