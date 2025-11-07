@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/role")
 @Validated
 @RequiredArgsConstructor
 public class RoleController {
@@ -22,7 +23,7 @@ public class RoleController {
     @Autowired
     private final RoleMapper mapper;
 
-    @PostMapping("/role")
+    @PostMapping("/create-role")
     public ResponseEntity<RoleOutDto> createRole(@RequestBody RoleInDto dto){
         RoleOutDto result = service.createRole(dto);
         return ResponseEntity.ok(result);
@@ -33,7 +34,7 @@ public class RoleController {
         RoleOutDto dto = mapper.toDto(role);
         return ResponseEntity.ok(dto);
     }
-    @GetMapping("/role")
+    @GetMapping()
     public ResponseEntity<List<RoleOutDto>> getAllRoles(){
         List<RoleOutDto> result = service.getAllRoles();
         return ResponseEntity.ok(result);
