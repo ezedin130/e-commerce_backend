@@ -21,7 +21,4 @@ public class Role {
     @NotBlank(message = "name is required")
     @Column(unique = true)
     private String name;
-    //Todo: figure out relationship between user and role possibly many to many
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
 }
