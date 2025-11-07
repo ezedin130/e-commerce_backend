@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,10 +20,13 @@ public class UserMapper {
     @Autowired
     private final RoleRepository roleRepo;
     public User toEntity(UserInDto dto){
-        Set<Role> roles = dto.getRoleIds().stream()
-                .map(id -> roleRepo.findById(Long.valueOf(id))
-                        .orElseThrow(() -> new RuntimeException("Role with " +id+ " id not found")))
-                .collect(Collectors.toSet());
+        Set<Role> roles = new HashSet<>();
+        if (dto.getRoleIds() != null) {
+            roles = dto.getRoleIds().stream()
+                    .map(id -> roleRepo.findById(id)
+                            .orElseThrow(() -> new RuntimeException("Role with ID " + id + " not found")))
+                    .collect(Collectors.toSet());
+        }
         return User.builder()
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
@@ -32,8 +36,8 @@ public class UserMapper {
                 .build();
     }
     public UserOutDto toDto(User user){
-        Set<Long> roleIds = user.getRoles().stream()
-                .map(Role::getId)  // Extract only the IDs
+        Set<Long> roleIds = new HashSet<>(user.getRoles()).stream()
+                .map(Role::getId)
                 .collect(Collectors.toSet());
         UserOutDto dto = new UserOutDto();
         dto.setId(user.getId());
