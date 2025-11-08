@@ -8,6 +8,7 @@ import com.example.ecommerce.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,5 +38,15 @@ public class StoreController {
     public ResponseEntity<List<StoreOutDto>> getAllStores(){
         List<StoreOutDto> result = service.getAllStores();
         return ResponseEntity.ok(result);
+    }
+    @PutMapping("/store/{id}")
+    public ResponseEntity<StoreOutDto> updateStore(
+            @PathVariable Long id,
+            @RequestBody StoreInDto dto
+    ) {
+        // Get the username of the currently logged-in user from SecurityContext
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        StoreOutDto updatedStore = service.updateStore(id, dto, username);
+        return ResponseEntity.ok(updatedStore);
     }
 }
