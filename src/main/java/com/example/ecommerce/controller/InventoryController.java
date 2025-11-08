@@ -8,6 +8,7 @@ import com.example.ecommerce.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,5 +42,14 @@ public class InventoryController {
     public ResponseEntity<List<InventoryOutDto>> getAllInventory(){
         List<InventoryOutDto> result = service.getAllInventories();
         return ResponseEntity.ok(result);
+    }
+    @PutMapping("/inventory/{id}/quantity")
+    public ResponseEntity<InventoryOutDto> updateInventoryQuantity(
+            @PathVariable Long id,
+            @RequestParam int quantity
+    ){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        InventoryOutDto updated = service.updateInventory(id,quantity,username);
+        return ResponseEntity.ok(updated);
     }
 }
