@@ -8,6 +8,7 @@ import com.example.ecommerce.service.ProductVariantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,5 +39,13 @@ public class ProductVariantController {
         List<ProductVariantOutDto> result = variantService.getAllVariants();
         return ResponseEntity.ok().body(result);
     }
+    @PutMapping("/variant/{id}")
+    public ResponseEntity<ProductVariantOutDto> updateVariant(
+            @PathVariable Long id,
+            @RequestBody ProductVariantInDto dto) {
 
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        ProductVariantOutDto updated = variantService.updateVariant(id, dto, username);
+        return ResponseEntity.ok(updated);
+    }
 }
