@@ -5,10 +5,13 @@ import com.example.ecommerce.dto.ProductDto.ProductOutDto;
 import com.example.ecommerce.mapper.ProductMapper;
 import com.example.ecommerce.model.Product;
 import com.example.ecommerce.model.Store;
+import com.example.ecommerce.model.User;
 import com.example.ecommerce.repository.ProductRepository;
 import com.example.ecommerce.repository.StoreRepository;
+import com.example.ecommerce.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,10 +28,20 @@ public class ProductService {
     private final ProductMapper mapper;
     @Autowired
     private final ProductVariantService variantService;
+    @Autowired
+    private final UserRepository userRepo;
 
     public ProductOutDto createProduct(ProductInDto dto){
         Store store = storeRepo.findById(dto.getStoreId())
                 .orElseThrow(()-> new RuntimeException("Store not found"));
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepo.findByUsername(username);
+        if (currentUser == null) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+        if (!store.getUser().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("Unauthorized: Only the store owner can create products for this store");
+        }
         Product product = mapper.toEntity(dto,store);
         Product savedProduct = prodRepo.save(product);
         variantService.createVariantForProduct(savedProduct);
