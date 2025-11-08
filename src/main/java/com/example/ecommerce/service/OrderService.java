@@ -1,14 +1,19 @@
 package com.example.ecommerce.service;
 
+import com.example.ecommerce.constant.OrderStatus;
+import com.example.ecommerce.constant.PaymentStatus;
 import com.example.ecommerce.dto.OrderDto.OrderInDto;
 import com.example.ecommerce.dto.OrderDto.OrderOutDto;
 import com.example.ecommerce.mapper.OrderMapper;
 import com.example.ecommerce.model.Order;
 import com.example.ecommerce.model.ProductVariant;
+import com.example.ecommerce.model.User;
 import com.example.ecommerce.repository.OrderRepository;
 import com.example.ecommerce.repository.ProductVariantRepository;
+import com.example.ecommerce.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,10 +30,26 @@ public class OrderService {
     private final OrderItemService itemService;
     @Autowired
     private final ProductVariantRepository variantRepo;
+    @Autowired
+    private final UserRepository userRepo;
     public OrderOutDto createOrder(OrderInDto dto){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepo.findByUsername(username);
+        if (currentUser == null) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+        boolean isCustomer = currentUser.getRoles().stream()
+                .anyMatch(role -> role.getName().equalsIgnoreCase("CUSTOMER"));
+        if (!isCustomer) {
+            throw new RuntimeException("Only users with CUSTOMER role can create orders");
+        }
         ProductVariant variant = variantRepo.findById(dto.getProductVariantId())
                 .orElseThrow(()-> new RuntimeException("Product Variant Not Found"));
-        Order order = mapper.toEntity(dto,variant);
+        User user = userRepo.findById(dto.getUserId())
+                .orElseThrow(()-> new RuntimeException("User Not Found"));
+        Order order = mapper.toEntity(dto,variant,user);
+        order.setOrderStatus(OrderStatus.PENDING);
+        order.setPaymentStatus(PaymentStatus.NOT_PAID);
         Order savedOrder = orderRepo.save(order);
         itemService.createOrderItemForOrder(variant.getId(),savedOrder);
         return mapper.toDto(savedOrder);
