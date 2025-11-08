@@ -11,4 +11,5 @@ public class OrderOutDto {
     private LocalDate orderDate;
     private double totalPrice;
     private Long productVariantId;
+    private Long userId;
 }
