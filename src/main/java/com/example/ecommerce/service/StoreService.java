@@ -40,6 +40,26 @@ public class StoreService {
                 .map(storeMapper::toDto)
                 .collect(Collectors.toList());
     }
-    //ToDo : there should be some way to find store by owner
-    //ToDo :  make sure there is way to change store fields using put or patch operation specifically after authentication and authorization are enabled
+    public StoreOutDto updateStore(Long storeId, StoreInDto dto, String username) {
+        User currentUser = userRepo.findByUsername(username);
+        if (currentUser == null) {
+            throw new RuntimeException("User not found");
+        }
+        Store store = storeRepo.findById(storeId)
+                .orElseThrow(() -> new RuntimeException("Store not found"));
+
+        if (!store.getUser().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("Unauthorized: You are not the owner of this store");
+        }
+        if (dto.getName() != null && !dto.getName().isBlank()) {
+            store.setName(dto.getName());
+        }
+
+        if (dto.getAddress() != null && !dto.getAddress().isBlank()) {
+            store.setAddress(dto.getAddress());
+        }
+
+        Store saved = storeRepo.save(store);
+        return storeMapper.toDto(saved);
+    }
 }
