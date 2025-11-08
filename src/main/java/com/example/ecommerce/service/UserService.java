@@ -72,4 +72,23 @@ public class UserService {
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
+    public void changeOwnPassword(String username, String currentPassword, String newPassword) {
+        User user = userRepo.findByUsername(username);
+        if(user == null){
+            throw new RuntimeException("User not found");
+        }
+
+        if (!encoder.matches(currentPassword, user.getPassword())) {
+            throw new RuntimeException("Current password is incorrect");
+        }
+
+        user.setPassword(encoder.encode(newPassword));
+        userRepo.save(user);
+    }
+    public void resetUserPassword(Long targetUserId, String newPassword){
+        User user = userRepo.findById(targetUserId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setPassword(encoder.encode(newPassword));
+        userRepo.save(user);
+    }
 }
