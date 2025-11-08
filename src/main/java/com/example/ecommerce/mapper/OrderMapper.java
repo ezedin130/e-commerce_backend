@@ -6,19 +6,19 @@ import com.example.ecommerce.dto.OrderDto.OrderInDto;
 import com.example.ecommerce.dto.OrderDto.OrderOutDto;
 import com.example.ecommerce.model.Order;
 import com.example.ecommerce.model.ProductVariant;
+import com.example.ecommerce.model.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
 @Service
 public class OrderMapper {
-    public Order toEntity(OrderInDto dto, ProductVariant variant){
+    public Order toEntity(OrderInDto dto, ProductVariant variant, User user){
         return Order.builder()
                 .orderDate(LocalDate.now())
-                .orderStatus(OrderStatus.valueOf(dto.getOrderStatus()))
-                .paymentStatus(PaymentStatus.valueOf(dto.getPaymentStatus()))
                 .totalPrice(dto.getTotalPrice())
                 .productVariant(variant)
+                .user(user)
                 .build();
     }
     public OrderOutDto toDto(Order order){
@@ -29,6 +29,7 @@ public class OrderMapper {
         dto.setPaymentStatus(order.getPaymentStatus().name());
         dto.setTotalPrice(order.getTotalPrice());
         dto.setProductVariantId(order.getProductVariant().getId());
+        dto.setUserId(order.getUser().getId());
         return dto;
     }
 }
