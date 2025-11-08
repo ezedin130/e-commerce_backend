@@ -44,7 +44,6 @@ public class StoreController {
             @PathVariable Long id,
             @RequestBody StoreInDto dto
     ) {
-        // Get the username of the currently logged-in user from SecurityContext
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         StoreOutDto updatedStore = service.updateStore(id, dto, username);
         return ResponseEntity.ok(updatedStore);
