@@ -37,7 +37,10 @@ public class UserService {
 
     public UserOutDto createUser(UserInDto dto){
         User user = mapper.toEntity(dto);
-        user.setPassword(encoder.encode(user.getPassword()));
+        String username = generateUsername(dto.getFirstName(), dto.getLastName()).toLowerCase();
+        user.setUsername(username);
+        String password = dto.getFirstName() + "123";
+        user.setPassword(encoder.encode(password));
         User savedUser = userRepo.save(user);
         return mapper.toDto(savedUser);
     }
@@ -90,5 +93,8 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         user.setPassword(encoder.encode(newPassword));
         userRepo.save(user);
+    }
+    private String generateUsername(String firstName, String lastName) {
+        return firstName.toLowerCase() + lastName.charAt(0);
     }
 }
