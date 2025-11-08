@@ -6,8 +6,10 @@ import com.example.ecommerce.mapper.ProductVariantMapper;
 import com.example.ecommerce.model.Product;
 import com.example.ecommerce.model.ProductVariant;
 import com.example.ecommerce.model.Store;
+import com.example.ecommerce.model.User;
 import com.example.ecommerce.repository.ProductRepository;
 import com.example.ecommerce.repository.ProductVariantRepository;
+import com.example.ecommerce.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ public class ProductVariantService {
     private final ProductRepository productRepo;
     @Autowired
     private final InventoryService inventoryService;
+    @Autowired
+    private final UserRepository userRepo;
 
     public ProductVariantOutDto createVariant(ProductVariantInDto dto){
         Product product = productRepo.findById(dto.getProductId())
@@ -49,7 +53,7 @@ public class ProductVariantService {
         ProductVariant savedVariant = variantRepo.save(variant);
         Store store = product.getStore();
         if (store != null) {
-            inventoryService.createInventoryForStore(store.getId(), savedVariant.getId(), 0);
+            inventoryService.createInventoryForStore(store.getId(), savedVariant.getId(), 1);
         } else {
             throw new RuntimeException("Cannot create inventory — product has no store assigned");
         }
@@ -64,5 +68,23 @@ public class ProductVariantService {
         return variantRepo.findAll().stream()
                 .map(variantMapper::toDto)
                 .collect(Collectors.toList());
+    }
+    public ProductVariantOutDto updateVariant(Long variantId, ProductVariantInDto dto, String username) {
+        User currentUser = userRepo.findByUsername(username);
+        if(currentUser == null) {
+            throw new RuntimeException("User not found");
+        }
+        ProductVariant variant = variantRepo.findById(variantId)
+                .orElseThrow(() -> new RuntimeException("Variant not found"));
+        User owner = variant.getProduct().getStore().getUser();
+        if (!owner.getId().equals(currentUser.getId())) {
+            throw new RuntimeException("Unauthorized: You can only update variants for your own store");
+        }
+
+        if (dto.getColor() != null) variant.setColor(dto.getColor());
+        if (dto.getSize() != null) variant.setSize(dto.getSize());
+
+        variantRepo.save(variant);
+        return variantMapper.toDto(variant);
     }
 }
