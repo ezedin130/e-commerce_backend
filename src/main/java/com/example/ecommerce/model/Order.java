@@ -37,5 +37,7 @@ public class Order {
     @JoinColumn(name = "product_variant_id")
     private ProductVariant productVariant;
     //ToDo:add relationship with the user after user is created
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }
