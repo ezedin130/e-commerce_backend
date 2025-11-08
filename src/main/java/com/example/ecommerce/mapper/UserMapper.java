@@ -30,8 +30,6 @@ public class UserMapper {
         return User.builder()
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
-                .password(dto.getPassword())
-                .username(dto.getUserName())
                 .roles(roles)
                 .build();
     }
