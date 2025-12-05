@@ -9,6 +9,7 @@ import com.example.ecommerce.repository.StoreRepository;
 import com.example.ecommerce.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,10 +32,24 @@ public class StoreService {
         Store savedStore = storeRepo.save(store);
         return storeMapper.toDto(savedStore);
     }
-    public Store findStoreById(Long id){
-        return storeRepo.findById(id)
-                .orElseThrow(()-> new RuntimeException("Store with" +id+ "id is not found"));
+    public Store findStoreById(Long id) {
+        Store store = storeRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Store with id " + id + " not found"));
+
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepo.findByUsername(currentUsername);
+
+        boolean isOwner = store.getUser().getUsername().equals(currentUsername);
+        boolean isAdmin = currentUser.getRoles().stream()
+                .anyMatch(role -> role.getName().equalsIgnoreCase("ADMIN"));
+
+        if (!isOwner && !isAdmin) {
+            throw new RuntimeException("Unauthorized access to store");
+        }
+
+        return store;
     }
+
     public List<StoreOutDto> getAllStores(){
         return storeRepo.findAll().stream()
                 .map(storeMapper::toDto)
