@@ -32,17 +32,15 @@ public class ProductService {
     private final UserRepository userRepo;
 
     public ProductOutDto createProduct(ProductInDto dto){
-        Store store = storeRepo.findById(dto.getStoreId())
-                .orElseThrow(()-> new RuntimeException("Store not found"));
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userRepo.findByUsername(username);
         if (currentUser == null) {
             throw new RuntimeException("Authenticated user not found");
         }
-        if (!store.getUser().getId().equals(currentUser.getId())) {
-            throw new RuntimeException("Unauthorized: Only the store owner can create products for this store");
-        }
-        Product product = mapper.toEntity(dto,store);
+        Store store = storeRepo.findByUserId(currentUser.getId())
+                .orElseThrow(() -> new RuntimeException("Store for this user not found"));
+
+        Product product = mapper.toEntity(dto, store);
         Product savedProduct = prodRepo.save(product);
         variantService.createVariantForProduct(savedProduct);
         return mapper.toDto(savedProduct);
