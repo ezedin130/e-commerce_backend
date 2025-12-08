@@ -63,4 +63,18 @@ public class OrderService {
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
+    public List<OrderOutDto> getOrdersForStoreOwner() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepo.findByUsername(username);
+
+        if (currentUser == null) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+
+        List<Order> orders = orderRepo.findOrdersForStoreOwner(currentUser.getId());
+
+        return orders.stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+    }
 }
