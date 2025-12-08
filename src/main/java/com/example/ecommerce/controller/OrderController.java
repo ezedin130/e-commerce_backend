@@ -8,12 +8,14 @@ import com.example.ecommerce.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin("10.172.160.238")
 @Validated
 @RequiredArgsConstructor
 public class OrderController {
@@ -33,9 +35,15 @@ public class OrderController {
         OrderOutDto dto = mapper.toDto(order);
         return ResponseEntity.ok(dto);
     }
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/order")
     public ResponseEntity<List<OrderOutDto>> getAllOrders(){
         List<OrderOutDto> result = service.getAllOrders();
+        return ResponseEntity.ok(result);
+    }
+    @GetMapping("/order-from-store-owner")
+    public ResponseEntity<List<OrderOutDto>> getAllOrdersFromStoreOwner(){
+        List<OrderOutDto> result = service.getOrdersForStoreOwner();
         return ResponseEntity.ok(result);
     }
 }
