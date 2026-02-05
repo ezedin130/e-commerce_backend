@@ -10,26 +10,6 @@ It handles business logic, data persistence, and secure access for frontend or m
 
 Built mainly for learning, practice, and demonstration of backend development using Spring Boot.
 
-🚀 Features
-
-User registration and authentication
-
-Role-based authorization (USER / ADMIN)
-
-Product management (CRUD)
-
-Category management
-
-Shopping cart functionality
-
-Order creation and tracking
-
-Secure APIs using JWT
-
-RESTful architecture
-
-Clean and modular code structure
-
 🛠 Tech Stack
 Layer	Technology
 Language	Java
@@ -54,46 +34,6 @@ src/
 ├── test/
 ├── pom.xml
 └── README.md
-
-⚙️ Installation & Setup
-Prerequisites
-
-Java 17+
-
-Maven
-
-Database (MySQL, PostgreSQL, or H2)
-
-Steps
-
-Clone the repository:
-
-git clone https://github.com/ezedin130/e-commerce_backend.git
-cd e-commerce_backend
-
-
-Configure application properties:
-
-spring.datasource.url=jdbc:your_database_url
-spring.datasource.username=your_db_username
-spring.datasource.password=your_db_password
-
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-
-jwt.secret=your_jwt_secret
-server.port=8080
-
-
-Build and run:
-
-mvn clean install
-mvn spring-boot:run
-
-
-Server runs at:
-
-http://localhost:8080
 
 📡 API Endpoints
 🔐 Authentication
